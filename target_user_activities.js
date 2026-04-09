@@ -1,25 +1,45 @@
 export default function handler(req, res) {
-    if (req.method === 'POST') {
-        const { 
-            last_visit_modeEco_Dashboard, 
-            last_visit_modeEco_BilanConso, 
-            extra_param 
-        } = req.body;
+  // Méthode uniquement POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      error: 'Method Not Allowed',
+      message: 'Only POST requests are accepted'
+    });
+  }
 
-        // Logic: Return 400 if types aren't boolean (optional)
-        if (typeof last_visit_modeEco_Dashboard !== 'boolean' && last_visit_modeEco_Dashboard !== undefined) {
-            return res.status(400).json({ error: 'Invalid types' });
-        }
+  const {
+    last_visit_modeEco_Dashboard,
+    last_visit_modeEco_BilanConso,
+    last_visit_modeEco_autre  // 3ème param optionnel
+  } = req.body;
 
-        // Return 200 Success
-        return res.status(200).json({
-            message: "Activity logged successfully",
-            received: { last_visit_modeEco_Dashboard, last_visit_modeEco_BilanConso }
-        });
-    } 
-    else {
-        // Handle non-POST requests
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+  // Validation : si fournis, doivent être des booléens
+  const params = {
+    last_visit_modeEco_Dashboard,
+    last_visit_modeEco_BilanConso,
+    last_visit_modeEco_autre
+  };
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && typeof value !== 'boolean') {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: `Parameter "${key}" must be a boolean if provided`,
+        received: typeof value
+      });
     }
+  }
+
+  // Logique métier ici
+  const result = {
+    success: true,
+    received: {
+      last_visit_modeEco_Dashboard: last_visit_modeEco_Dashboard ?? null,
+      last_visit_modeEco_BilanConso: last_visit_modeEco_BilanConso ?? null,
+      last_visit_modeEco_autre: last_visit_modeEco_autre ?? null
+    },
+    timestamp: new Date().toISOString()
+  };
+
+  return res.status(200).json(result);
 }

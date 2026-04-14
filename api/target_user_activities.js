@@ -10,14 +10,14 @@ export default function handler(req, res) {
   const {
     last_visit_modeEco_Dashboard,
     last_visit_modeEco_BilanConso,
-    last_visit_modeEco_autre  // 3ème param optionnel
+    is_modeEco_active
   } = req.body;
 
   // Validation : si fournis, doivent être des booléens
   const params = {
     last_visit_modeEco_Dashboard,
     last_visit_modeEco_BilanConso,
-    last_visit_modeEco_autre
+    is_modeEco_active
   };
 
   for (const [key, value] of Object.entries(params)) {
@@ -36,7 +36,7 @@ export default function handler(req, res) {
     received: {
       last_visit_modeEco_Dashboard: last_visit_modeEco_Dashboard ?? null,
       last_visit_modeEco_BilanConso: last_visit_modeEco_BilanConso ?? null,
-      last_visit_modeEco_autre: last_visit_modeEco_autre ?? null
+      is_modeEco_active: is_modeEco_active ?? null
     },
     timestamp: new Date().toISOString()
   };

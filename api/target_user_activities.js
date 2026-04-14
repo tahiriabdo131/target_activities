@@ -8,6 +8,7 @@ export default function handler(req, res) {
   }
 
   const {
+    last_visit_user_Dashboard,
     last_visit_modeEco_Dashboard,
     last_visit_modeEco_BilanConso,
     is_modeEco_active
@@ -15,6 +16,7 @@ export default function handler(req, res) {
 
   // Validation : si fournis, doivent être des booléens
   const params = {
+    last_visit_user_Dashboard,
     last_visit_modeEco_Dashboard,
     last_visit_modeEco_BilanConso,
     is_modeEco_active
@@ -34,6 +36,7 @@ export default function handler(req, res) {
   const result = {
     success: true,
     received: {
+      last_visit_user_Dashboard: last_visit_user_Dashoboard ?? null,
       last_visit_modeEco_Dashboard: last_visit_modeEco_Dashboard ?? null,
       last_visit_modeEco_BilanConso: last_visit_modeEco_BilanConso ?? null,
       is_modeEco_active: is_modeEco_active ?? null

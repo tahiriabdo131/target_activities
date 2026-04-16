@@ -25,18 +25,18 @@ export default function handler(req, res) {
   }
 
   const {
-    last_visit_user_Dashboard,
-    last_visit_modeEco_Dashboard,
-    last_visit_modeEco_BilanConso,
-    is_modeEco_active
+    isLastConnexion,
+    ILI_DerniereConnexionDashboardModeEco,
+    ILI_DerniereConnexionBilanConso,
+    ILI_ModeEcoActif
   } = req.body;
 
   // Validation : si fournis, doivent être des booléens
   const params = {
-    last_visit_user_Dashboard,
-    last_visit_modeEco_Dashboard,
-    last_visit_modeEco_BilanConso,
-    is_modeEco_active
+    isLastConnexion,
+    ILI_DerniereConnexionDashboardModeEco,
+    ILI_DerniereConnexionBilanConso,
+    ILI_ModeEcoActif
   };
 
   for (const [key, value] of Object.entries(params)) {
@@ -53,10 +53,10 @@ export default function handler(req, res) {
   const result = {
     success: true,
     received: {
-      last_visit_user_Dashboard: last_visit_user_Dashboard ?? null,
-      last_visit_modeEco_Dashboard: last_visit_modeEco_Dashboard ?? null,
-      last_visit_modeEco_BilanConso: last_visit_modeEco_BilanConso ?? null,
-      is_modeEco_active: is_modeEco_active ?? null
+      isLastConnexion: isLastConnexion ?? null,
+      ILI_DerniereConnexionDashboardModeEco: ILI_DerniereConnexionDashboardModeEco ?? null,
+      ILI_DerniereConnexionBilanConso: ILI_DerniereConnexionBilanConso ?? null,
+      is_modeEco_active: ILI_ModeEcoActif ?? null
     },
     timestamp: new Date().toISOString()
   };

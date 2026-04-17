@@ -15,27 +15,37 @@ export default function handler(req, res) {
     return res.status(405).json({ error: 'Only POST allowed' });
   }
 
+  // 🔥 IMPORTANT: fallback safe
   const body = req.body || {};
 
-  // ✅ robust string → boolean (form-data safe)
+  console.log("RAW BODY:", body); // 👈 debug important
+
+  // ✅ convert string / boolean / number → boolean
   const toBoolean = (value) => {
-    if (value === true || value === "true" || value === "1") return true;
-    if (value === false || value === "false" || value === "0") return false;
-    return null; // unknown / not provided
+    if (value === true || value === "true" || value === "1" || value === 1) return true;
+    if (value === false || value === "false" || value === "0" || value === 0) return false;
+    return null;
+  };
+
+  // ✅ normalize function (VERY IMPORTANT for form-data weird cases)
+  const getValue = (key) => {
+    const v = body[key];
+    if (Array.isArray(v)) return v[0]; // parfois form-data envoie array
+    return v;
   };
 
   const params = {
-    isLastConnexion: toBoolean(body.isLastConnexion),
-    ILI_DerniereConnexionDashboardModeEco: toBoolean(body.ILI_DerniereConnexionDashboardModeEco),
-    ILI_DerniereConnexionBilanConso: toBoolean(body.ILI_DerniereConnexionBilanConso),
-    ILI_ModeEcoActif: toBoolean(body.ILI_ModeEcoActif),
+    isLastConnexion: toBoolean(getValue("isLastConnexion")),
+    ILI_DerniereConnexionDashboardModeEco: toBoolean(getValue("ILI_DerniereConnexionDashboardModeEco")),
+    ILI_DerniereConnexionBilanConso: toBoolean(getValue("ILI_DerniereConnexionBilanConso")),
+    ILI_ModeEcoActif: toBoolean(getValue("ILI_ModeEcoActif")),
   };
 
-  // ❌ validation stricte (only if provided)
+  // ❌ validation stricte
   for (const [key, value] of Object.entries(params)) {
     if (value !== null && typeof value !== 'boolean') {
       return res.status(400).json({
-        error: `Parameter "${key}" must be boolean (true/false/1/0/string)`
+        error: `Parameter "${key}" must be boolean (true/false/1/0)`
       });
     }
   }
